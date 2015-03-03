@@ -2,15 +2,24 @@
 (function () {
 	var app = angular.module('anguLearn', ['ngRoute', 'anguLearn.controllers', 'anguLearn.services']);
 
-	app.config(function ($routeProvider) {
+	app.config(function ($routeProvider, $locationProvider) {
   		$routeProvider.
-    	when('/', {
+  		when('/', {
       		templateUrl: 'partials/index',
       		controller: 'IndexCtrl'
+    	}).
+    	when('/twitter', {
+      		templateUrl: 'partials/twitter',
+      		controller: 'TwitterCtrl'
+    	}).
+    	when('/youtube', {
+      		templateUrl: 'partials/youtube',
+      		controller: 'YoutubeCtrl'
     	}).
     	otherwise({
       		redirectTo: '/'
     	});
+    	$locationProvider.html5Mode(true);
 	});
 
 })();

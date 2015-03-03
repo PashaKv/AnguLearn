@@ -2,7 +2,10 @@
 (function () {
 	
 	angular.module('anguLearn.controllers', ['anguLearn.services']).
-	controller('IndexCtrl', ['$scope', '$q', 'twitterService', function($scope, $q, twitterService){
+	controller('IndexCtrl', ['$scope', function($scope){
+		$scope.name = 'World!';
+	}]).
+	controller('TwitterCtrl', ['$scope', '$q', 'twitterService', function($scope, $q, twitterService){
 		$scope.tweets = {};
 		$scope.myTweets = false;
 		twitterService.init();
@@ -63,6 +66,61 @@
 	        $scope.getTweets();
 	    };
 
+	}]).
+	controller('YoutubeCtrl', ['$scope', 'youtubeService', function($scope, youtubeService){
+		$scope.videos = {};
+		$scope.me = false;
+		$scope.theVideo = false;
+		youtubeService.init();
+
+		$scope.logIn = function(){
+			youtubeService.connectYoutube().then(function(){
+				if(youtubeService.isReady()){
+					$('#youtube-login').fadeOut();
+					$('#youtube-logout').fadeIn();
+					$scope.initMe();
+					$scope.getVideos();
+				}
+			});
+		};
+
+		$scope.logOut = function(){
+			$scope.me = false;
+			$scope.videos = false;
+			$scope.closeVideo();
+			youtubeService.clearCache();
+			$('#youtube-login').fadeIn();
+			$('#youtube-logout').fadeOut();
+		};
+
+		$scope.getVideos = function(){
+			youtubeService.getPopularVideos().then(function(data){
+				$scope.videos = data;
+			});
+		};
+
+		$scope.initMe = function(){
+			youtubeService.me().then(function(data){
+				$scope.me = data;
+			});
+		};
+
+		$scope.closeVideo = function(){
+			$scope.theVideo = false;
+			$('#videoFrame').html("");
+		}
+
+		$scope.showVideo = function(id){
+			$scope.theVideo = true;
+			$('#videoFrame').html("<iframe id=\"videoFrame\" width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+id+"\" frameborder=\"0\" allowfullscreen></iframe>");
+		}
+
+		if(youtubeService.isReady()){
+			$('#youtube-login').hide();
+			$('#youtube-logout').show();
+			$scope.initMe();
+			$scope.getVideos();
+		};
 	}]);
 
 })();

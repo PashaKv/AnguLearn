@@ -1,0 +1,26 @@
+h3 Youtube OAuth Attempt
+div.row
+	div.col-xs-12
+		button.btn.btn-primary#youtube-login(ng-click="logIn()") Login
+		button.btn.btn-warning#youtube-logout(style="display:none;" ng-click="logOut()") Logout
+
+div.row(ng-show="me")
+	div.col-md-2
+		img(ng-src="{{me.avatar}}")
+	div.col-md-10 Hello, {{me.name}}
+	br
+	br
+
+div.row(ng-show="theVideo")
+	div#videoFrame
+	br
+	button.btn-default(ng-click="closeVideo()") Close video
+	br
+
+div.row
+	div.col-xs-12#results
+		div.row(ng-repeat="video in videos.items")
+			div.col-md-4
+				img(ng-src="{{video.snippet.thumbnails.default.url}}" ng-click="showVideo(video.id)")
+			div.col-md-8
+				p {{video.snippet.title}}
