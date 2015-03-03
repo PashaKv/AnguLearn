@@ -21,7 +21,6 @@
 				return;
 			}
 			twitterService.reTweet(id).then(function(){
-				$scope.myTweets = true;
 				$scope.getMyTweets();
 			});
 		}
