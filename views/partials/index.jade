@@ -1,2 +1,20 @@
-h3 {{hi}}
-TEST
+h3 Twitter OAuth Attempt
+div.row
+	div.col-xs-12
+		button#twitter-login(ng-click="logIn()") Login
+		button(ng-click="getMyTweets()") Get my own tweets
+		button(ng-click="getTweets()") Get all tweets
+		button#twitter-logout(ng-click="logOut()") Logout
+
+
+div.row
+	div.col-xs-12#results
+		div.row(ng-repeat="t in tweets")
+			div.col-xs-2.col-sm-1
+				img.img-circle(ng-src="{{t.user.profile_image_url}}")
+			div.col-xs-10.col-sm-11
+				small {{t.user.name}}
+				br 
+				p {{t.text}}
+				a(ng-show="myTweets" ng-click="deleteTweet(t.id_str)") Delete this status
+				a(ng-show="!myTweets" ng-click="reTweet(t.id_str)") Retweet this status

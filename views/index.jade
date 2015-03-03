@@ -1,13 +1,15 @@
 extends layout
 
 block body
-  div
+  div.container
     h2 AnguLearn
     
     div(ng-view)
 
   script(src='js/lib/angular/angular.js')
   script(src='js/lib/angular/angular-route.js')
+  script(src='js/lib/oauth/oauth.js')
+  script(src='js/lib/jquery/jquery.js')  
   script(src='js/app.js')
   script(src='js/services.js')
   script(src='js/controllers.js')
