@@ -46,6 +46,8 @@
 			twitterService.connectTwitter().then(function(){
 				if(twitterService.isReady()){
 					$('#twitter-login').fadeOut();
+					$('#twitter-getmytweets').fadeIn();
+					$('#twitter-gettweets').fadeIn();
 					$('#twitter-logout').fadeIn();
 					$scope.getTweets();
 				}
@@ -56,12 +58,16 @@
 	        twitterService.clearCache();
 			$scope.tweets = {};
 	        $('#twitter-login').fadeIn();
+	        $('#twitter-getmytweets').fadeOut();
+	        $('#twitter-gettweets').fadeOut();
 	        $('#twitter-logout').fadeOut();
 	    };
 
 	    //if the user is a returning user, hide the sign in button and display the tweets
 	    if (twitterService.isReady()) {
 	        $('#twitter-login').hide();
+	        $('#twitter-getmytweets').show();
+	        $('#twitter-gettweets').show();
 	        $('#twitter-logout').show();
 	        $scope.getTweets();
 	    };

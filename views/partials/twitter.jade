@@ -1,10 +1,10 @@
 h3 Twitter OAuth
 div.row
 	div.col-xs-12
-		button#twitter-login(ng-click="logIn()") Login
-		button(ng-click="getMyTweets()") Get my own tweets
-		button(ng-click="getTweets()") Get all tweets
-		button#twitter-logout(ng-click="logOut()") Logout
+		button.btn.btn-primary#twitter-login(ng-click="logIn()") Login
+		button.btn.btn-default#twitter-getmytweets(ng-click="getMyTweets()" style="display:none;") Get my own tweets
+		button.btn.btn-default#twitter-gettweets(ng-click="getTweets()" style="display:none;") Get all tweets
+		button.btn.btn-warning#twitter-logout(ng-click="logOut()" style="display:none;") Logout
 
 
 div.row
