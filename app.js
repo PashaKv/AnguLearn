@@ -4,7 +4,11 @@ var bodyParser = require('body-parser');
 var routes = require('./routes');
 
 var app = module.exports = express();
-asdasdasda
+
+/**
+ * Configuration
+ */
+
 // all environments
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
