@@ -6,7 +6,7 @@
   		$routeProvider.
   		when('/', {
       		templateUrl: 'partials/index',
-      		controller: 'IndexCtrl'B
+      		controller: 'IndexCtrl'
     	}).
     	when('/twitter', {
       		templateUrl: 'partials/twitter',
@@ -21,5 +21,4 @@
     	});
     	$locationProvider.html5Mode(true);
 	});
-И
 })();
