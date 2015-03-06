@@ -4,7 +4,8 @@
   "description": "Angular Learn App",
   "main": "app.js",
   "scripts": {
-    "test": "node node_modules/karma/bin/karma start test/sample.conf.js"
+    "test": "node node_modules/karma/bin/karma start test/sample.conf.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

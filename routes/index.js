@@ -1,12 +1,16 @@
 /*
  * GET home page.
  */
+var express = require('express');
+var router = express.Router();
 
-exports.index = function(req, res){
+router.route('/').get(function(req, res){
   res.render('index');
-};
+});
 
-exports.partials = function (req, res) {
+router.route('/partials/:name').get(function (req, res) {
   var name = req.params.name;
   res.render('partials/' + name);
-};
+});
+
+module.exports = router;

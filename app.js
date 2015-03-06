@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
-var bodyParser = require('body-parser');
-var routes = require('./routes');
+var index = require('./routes/index');
+var log = (process.argv[2]==='-l');
 
 var app = module.exports = express();
 
@@ -13,8 +13,14 @@ var app = module.exports = express();
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
+
+// logging if 1st arg is equal to '-l'
+if(log){
+  var morgan = require('morgan');
+  app.use(morgan('dev', {}));
+}
+
+//static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -23,9 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 
 // Routes
-
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
+app.use('/', index);
 
 /**
  * Start Server
@@ -35,5 +39,5 @@ var server = app.listen(app.get('port'), function () {
     var host = server.address().address
     var port = server.address().port
 
-    console.log('Example app listening at http://%s:%s', host, port)
+    console.log('AnguLearn is listening at http://%s:%s', host, port)
 });
