@@ -13,4 +13,10 @@ router.route('/partials/:name').get(function (req, res) {
   res.render('partials/' + name);
 });
 
+//catch-all route
+
+router.route('*').get(function (req, res) {
+    res.render('index');
+});
+
 module.exports = router;
