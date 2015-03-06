@@ -1,18 +1,18 @@
-// *controllers here* //
+//Controllers here
 (function () {
-	
+
 	angular.module('anguLearn.controllers', ['anguLearn.services']).
 	controller('IndexCtrl', ['$scope', function($scope){
 		$scope.name = 'World!';
 	}]).
-	controller('TwitterCtrl', ['$scope', '$q', 'twitterService', function($scope, $q, twitterService){
+	controller('TwitterCtrl', ['$scope', 'twitterService', function($scope, twitterService){
 		$scope.tweets = {};
 		$scope.myTweets = false;
 		twitterService.init();
 
 		$scope.deleteTweet = function(id){
 			if(!$scope.myTweets){
-				return;
+				return false;
 			}
 			twitterService.deleteTweet(id).then(function(){
 				$scope.getMyTweets();
@@ -21,7 +21,7 @@
 
 		$scope.reTweet = function(id){
 			if($scope.myTweets){
-				return;
+				return false;
 			}
 			twitterService.reTweet(id).then(function(){
 				$scope.getMyTweets();
@@ -32,6 +32,9 @@
 			twitterService.getAllTweets().then(function(data){
 				$scope.myTweets = false;
 				$scope.tweets = data;
+				$scope.$apply();
+			}, function(error){
+				console.error(error);
 			});
 		};
 
@@ -39,6 +42,9 @@
 			twitterService.getUserTweets().then(function(data){
 				$scope.myTweets = true;
 				$scope.tweets = data;
+				$scope.$apply();
+			}, function(error){
+				console.error(error);
 			});
 		};
 
@@ -51,12 +57,12 @@
 					$('#twitter-logout').fadeIn();
 					$scope.getTweets();
 				}
-			})
+			});
 		};
 
 	    $scope.logOut = function() {
 	        twitterService.clearCache();
-			$scope.tweets = {};
+					$scope.tweets = {};
 	        $('#twitter-login').fadeIn();
 	        $('#twitter-getmytweets').fadeOut();
 	        $('#twitter-gettweets').fadeOut();
@@ -102,6 +108,9 @@
 		$scope.getVideos = function(){
 			youtubeService.getPopularVideos().then(function(data){
 				$scope.videos = data;
+				$scope.$apply();
+			}, function(error){
+				console.error(error);
 			});
 		};
 

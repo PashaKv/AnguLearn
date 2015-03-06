@@ -1,4 +1,4 @@
-// *SERVICES here* //
+//Services here
 (function () {
 	angular.module('anguLearn.services', []).
 	factory('twitterService', ['$q', function($q){
@@ -17,10 +17,9 @@
 				OAuth.popup('twitter', {cache:true}, function(err, result){
 					if(!err){
 						authResult = result;
-						deferred.resolve();
+						deferred.resolve(true);
 					}else{
-						console.error(err);
-						deferred.reject();
+						deferred.reject(err);
 					}
 				});
 				return deferred.promise;
@@ -30,36 +29,16 @@
 				authResult = false;
 			},
 			getAllTweets: function(){
-				var deferred = $q.defer();
-				var promise = authResult.get('/1.1/statuses/home_timeline.json').done(function(data){
-					deferred.resolve(data);
-				});
-				return deferred.promise;
+			  return authResult.get('/1.1/statuses/home_timeline.json');
 			},
 			getUserTweets: function(){
-				var deferred = $q.defer();
-				var promise = authResult.get('/1.1/statuses/user_timeline.json').done(function(data){
-					deferred.resolve(data);
-				});
-				return deferred.promise;
+				return authResult.get('/1.1/statuses/user_timeline.json');
 			},
 			deleteTweet: function(id){
-				var deferred = $q.defer();
-				var promise = authResult.post('/1.1/statuses/destroy/'+id+'.json', {id: id, trim_user: true}).done(function(data){
-					deferred.resolve(data);
-				}).fail(function(jqxhr, textStatus, err){
-					deferred.reject(err);
-				});
-				return deferred.promise;
+				return authResult.post('/1.1/statuses/destroy/'+id+'.json', {id: id, trim_user: true});
 			},
 			reTweet: function(id){
-				var deferred = $q.defer();
-				var promise = authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true}).done(function(data){
-					deferred.resolve(data);
-				}).fail(function(jqxhr, textStatus, err){
-					deferred.reject(err);
-				});
-				return deferred.promise;
+				return authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true});
 			}
 		}
 	}]).
@@ -79,10 +58,9 @@
 				OAuth.popup('youtube', {cache:true}, function(err, result){
 					if(!err){
 						authResult = result;
-						deferred.resolve();
+						deferred.resolve(true);
 					}else{
-						console.error(err);
-						deferred.reject();
+						deferred.reject(err);
 					}
 				});
 				return deferred.promise;
@@ -92,20 +70,10 @@
 				authResult = false;
 			},
 			me: function(){
-				var deferred = $q.defer();
-				authResult.me().done(function(data){
-					deferred.resolve(data);
-				});
-				return deferred.promise;
+				return authResult.me();
 			},
 			getPopularVideos: function(){
-				var deferred = $q.defer();
-				var promise = authResult.get('/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10').done(function(data){
-					deferred.resolve(data);
-				}).fail(function(err){
-					deferred.reject(err);
-				});
-				return deferred.promise;
+				return authResult.get('/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10');
 			}
 		};
 	}]);
