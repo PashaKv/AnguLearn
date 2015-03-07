@@ -1,8 +1,7 @@
 // *APP here* //
 (function () {
-	var app = angular.module('anguLearn', ['ngRoute', 'anguLearn.controllers', 'anguLearn.services']);
-
-	app.config(function ($routeProvider, $locationProvider) {
+	angular.module('anguLearn', ['ngRoute', 'anguLearn.controllers', 'anguLearn.services'])
+	.config(function ($routeProvider, $locationProvider) {
   		$routeProvider.
   		when('/', {
       		templateUrl: 'partials/index',
@@ -15,6 +14,10 @@
     	when('/youtube', {
       		templateUrl: 'partials/youtube',
       		controller: 'YoutubeCtrl'
+    	}).
+			when('/reddit', {
+      		templateUrl: 'partials/reddit',
+      		controller: 'RedditCtrl'
     	}).
     	otherwise({
       		redirectTo: '/'
