@@ -1,5 +1,4 @@
 h3 Reddit manual OAuth attempt.
-h2 {{i}}
 p This page will manage the reddit auth and account management(or some other features).
-button.btn.btn-primary(ng-click="test()") TEST BUTTON
-button.btn.btn-primary(ng-click="inc()") INCREMENT
+button.btn.btn-primary(ng-click="login()" ng-show="!name") LOGIN
+div(ng-show="name") Welcome, {{name}}. You've registered your account at {{created*1000 | date}}. 

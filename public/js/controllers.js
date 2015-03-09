@@ -137,21 +137,28 @@
 			$scope.getVideos();
 		};
 	}])
-	.controller('RedditCtrl', ['$scope', '$window', function($scope, $window){
-		var redditLink = "https://www.reddit.com/api/v1/authorize?client_id=C5vJztsAyXmB6w&response_type=code&state=111&redirect_uri=http://localhost:3000/reddit&duration=temporary&scope=identity,read";
+	.controller('RedditCtrl', ['$scope', 'redditService', function($scope, redditService){
+		redditService.init();
 
-//TODO: try with cookies
-
-		$scope.i =  $window.sessionStorage['angulearn-i'] || 1;
-
-		$scope.test = function () {
-			$window.location.href = redditLink;
+		$scope.login = function(){
+			redditService.connectReddit();
 		};
 
-		$scope.inc = function () {
-				$scope.i++;
-				$window.sessionStorage['angulearn-i'] = $scope.i;
+		$scope.getMyInfo = function(){
+			if(redditService.isReady()){
+				redditService.me().then(function(data){
+					data = data.data;
+					console.log(data);
+					$scope.name = data.name;
+					$scope.created = data.created;
+				}, function(error){
+					console.log(error);
+					$scope.error = error;
+				});
+			};
 		};
+
+		$scope.getMyInfo();
 	}]);
 
 })();
