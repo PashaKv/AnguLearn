@@ -167,4 +167,26 @@ describe("Services", function(){
 			OAuth.create.restore();
 		})
 	});
+
+	describe('redditService', function(){
+		var redditService;
+
+		beforeEach(inject(function(_redditService_){
+			redditService = _redditService_;
+		}));
+
+		it('should define access_token during init if it is present as a hash parameter and clear it when asked to do so', function(){
+			expect(redditService.isReady()).toBeFalsy();
+			var $location;
+			inject(function(_$location_){
+				$location = _$location_;
+			});
+			sinon.stub($location, 'hash').returns('access_token=123');
+			redditService.init();
+			expect(redditService.isReady()).toBeTruthy();
+			redditService.clearCache();
+			expect(redditService.isReady()).toBeFalsy();
+			$location.hash.restore();
+		});
+	});
 });

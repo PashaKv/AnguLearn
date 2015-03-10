@@ -125,6 +125,9 @@
 			},
 			me: function(){
 				return $http.get('https://oauth.reddit.com/api/v1/me', {headers:{'Authorization':'bearer '+params.access_token}});
+			},
+			hot: function(){
+				return $http.get('https://oauth.reddit.com/hot', {headers:{'Authorization':'bearer '+params.access_token}});
 			}
 		}
 	}]);

@@ -1,6 +1,6 @@
 // *APP here* //
 (function () {
-	angular.module('anguLearn', ['ngRoute', 'anguLearn.controllers', 'anguLearn.services'])
+	angular.module('anguLearn', ['ngRoute', 'anguLearn.controllers', 'anguLearn.services', 'anguLearn.directives'])
 	.config(function ($routeProvider, $locationProvider) {
   		$routeProvider.
   		when('/', {

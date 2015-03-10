@@ -1,0 +1,7 @@
+div.row
+  div.col-md-1 {{post.data.score}}
+  div.col-md-2 {{post.data.author}} at {{post.data.created*1000|date}}
+  div.col-md-9
+    a(ng-href="{{post.data.url}}") {{post.data.title}}
+    br
+    a(ng-href="{{'http://www.reddit.com'+post.data.permalink}}") View {{post.data.num_comments}} comments.

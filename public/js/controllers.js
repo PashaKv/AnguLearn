@@ -144,11 +144,10 @@
 			redditService.connectReddit();
 		};
 
-		$scope.getMyInfo = function(){
+		getMyInfo = function(){
 			if(redditService.isReady()){
 				redditService.me().then(function(data){
 					data = data.data;
-					console.log(data);
 					$scope.name = data.name;
 					$scope.created = data.created;
 				}, function(error){
@@ -158,7 +157,19 @@
 			};
 		};
 
-		$scope.getMyInfo();
+		$scope.getHotLinks = function(){
+			if(redditService.isReady()){
+				redditService.hot().then(function(data){
+					$scope.posts = data.data.data.children;
+				}, function(error){
+					console.log(error);
+					$scope.error = error;
+				});
+			};
+		};
+
+		getMyInfo();
+		$scope.getHotLinks();
 	}]);
 
 })();
