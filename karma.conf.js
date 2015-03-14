@@ -6,7 +6,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '..',
+    basePath: '.',
 
 
     // frameworks to use
@@ -22,8 +22,7 @@ module.exports = function(config) {
       'public/bower_components/jquery/dist/jquery.js',
       'public/bower_components/oauth-js/dist/oauth.js',
       'public/bower_components/jasmine-sinon/lib/jasmine-sinon.js',
-      'public/js/*.js',
-      'test/**/*Spec.js'
+      'public/js/*.js'
     ],
     // test results reporter to use
     // possible values: 'dots', 'progress'
