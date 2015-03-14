@@ -117,7 +117,7 @@
 				}
 			},
 			connectReddit: function(){
-				$window.location.href = redditLink;
+				$window.location.replace(redditLink);
 			},
 			clearCache: function(){
 				params = {};

@@ -6,12 +6,14 @@
 		$scope.name = 'World!';
 	}]).
 	controller('TwitterCtrl', ['$scope', 'twitterService', function($scope, twitterService){
-		$scope.tweets = {};
-		$scope.myTweets = false;
+		var twitter = {};
+		$scope.twitter = twitter;
+		twitter.tweets = {};
+		twitter.myTweets = false;
 		twitterService.init();
 
 		$scope.deleteTweet = function(id){
-			if(!$scope.myTweets){
+			if(!twitter.myTweets){
 				return false;
 			}
 			twitterService.deleteTweet(id).then(function(){
@@ -20,7 +22,7 @@
 		}
 
 		$scope.reTweet = function(id){
-			if($scope.myTweets){
+			if($scope.twitter.myTweets){
 				return false;
 			}
 			twitterService.reTweet(id).then(function(){
@@ -30,8 +32,8 @@
 
 		$scope.getTweets = function(){
 			twitterService.getAllTweets().then(function(data){
-				$scope.myTweets = false;
-				$scope.tweets = data;
+				twitter.myTweets = false;
+				twitter.tweets = data;
 				$scope.$apply();
 			}, function(error){
 				console.error(error);
@@ -40,8 +42,8 @@
 
 		$scope.getMyTweets = function(){
 			twitterService.getUserTweets().then(function(data){
-				$scope.myTweets = true;
-				$scope.tweets = data;
+				twitter.myTweets = true;
+				twitter.tweets = data;
 				$scope.$apply();
 			}, function(error){
 				console.error(error);
@@ -62,7 +64,7 @@
 
 	    $scope.logOut = function() {
 	        twitterService.clearCache();
-					$scope.tweets = {};
+					twitter.tweets = {};
 	        $('#twitter-login').fadeIn();
 	        $('#twitter-getmytweets').fadeOut();
 	        $('#twitter-gettweets').fadeOut();

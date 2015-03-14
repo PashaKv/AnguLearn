@@ -66,16 +66,16 @@ describe("Controllers", function(){
 		});
 
 		it('should initialise tweets with an empty object', function(){
-			expect(scope.tweets).toEqualData({});
+			expect(scope.twitter.tweets).toEqualData({});
 		});
 
 		it('should set "myTweets" variable to be false by default', function(){
-			expect(scope.myTweets).toBe(false);
+			expect(scope.twitter.myTweets).toBe(false);
 		});
 
 		it('shouldnt delete non-users tweets, after deleting should get users tweets', function(){
 			expect(scope.deleteTweet(1)).toBeFalsy();
-			scope.myTweets = true;
+			scope.twitter.myTweets = true;
 			var stub = sinon.stub(scope, 'getMyTweets');
 			expect(mockTwitterService.deleteTweet).not.toHaveBeenCalled();
 			expect(stub).not.toHaveBeenCalled();
@@ -88,9 +88,9 @@ describe("Controllers", function(){
 		});
 
 		it('should retweet only non-users tweets, after retweeting should get users tweets', function(){
-			scope.myTweets = true;
+			scope.twitter.myTweets = true;
 			expect(scope.reTweet(1)).toBeFalsy();
-			scope.myTweets = false;
+			scope.twitter.myTweets = false;
 			mockTwitterService.reTweet.returns($q.when(1));
 			var stub = sinon.stub(scope, 'getMyTweets');
 			expect(mockTwitterService.reTweet).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("Controllers", function(){
 		});
 
 		it('should get tweets and manage scope vars accordingly', function(){
-			scope.myTweets = true;
+			scope.twitter.myTweets = true;
 			var sampleData = {'test1': 'testdata1', 'test2': 'testdata2'};
 			mockTwitterService.getAllTweets.returns($q.when(sampleData));
 			var stub = sinon.stub(scope, '$apply');
@@ -111,8 +111,8 @@ describe("Controllers", function(){
 			scope.getTweets();
 			$rootScope.$digest();
 			expect(stub).toHaveBeenCalledOnce();
-			expect(scope.myTweets).toBeFalsy();
-			expect(scope.tweets).toEqualData(sampleData);
+			expect(scope.twitter.myTweets).toBeFalsy();
+			expect(scope.twitter.tweets).toEqualData(sampleData);
 
 			scope.myTweets = true;
 			sampleData.test3 = 'testdata3';
@@ -131,7 +131,7 @@ describe("Controllers", function(){
 		});
 
 		it('should get the user tweets and manage variables accordingly', function () {
-			scope.myTweets = false;
+			scope.twitter.myTweets = false;
 			var sampleData = {'test1': 'testdata1', 'test2': 'testdata2'};
 			mockTwitterService.getUserTweets.returns($q.when(sampleData));
 			var stub = sinon.stub(scope, '$apply');
@@ -139,12 +139,12 @@ describe("Controllers", function(){
 			scope.getMyTweets();
 			$rootScope.$digest();
 			expect(stub).toHaveBeenCalledOnce();
-			expect(scope.myTweets).toBeTruthy();
-			expect(scope.tweets).toEqualData(sampleData);
+			expect(scope.twitter.myTweets).toBeTruthy();
+			expect(scope.twitter.tweets).toEqualData(sampleData);
 
-			scope.myTweets = false;
+			scope.twitter.myTweets = false;
 			sampleData.test3 = 'testdata3';
-			scope.tweets = sampleData;
+			scope.twitter.tweets = sampleData;
 			stub.restore();
 			var defer = $q.defer();
 			stub = sinon.stub(console, 'error');
@@ -152,8 +152,8 @@ describe("Controllers", function(){
 			defer.reject('test err');
 			scope.getMyTweets();
 			$rootScope.$digest();
-			expect(scope.myTweets).toBeFalsy();
-			expect(scope.tweets).toEqualData(sampleData);
+			expect(scope.twitter.myTweets).toBeFalsy();
+			expect(scope.twitter.tweets).toEqualData(sampleData);
 			expect(stub).toHaveBeenCalledWith('test err');
 			stub.restore();
 		});

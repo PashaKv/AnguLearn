@@ -9,12 +9,12 @@ div.row
 
 div.row
 	div.col-xs-12#results
-		div.row(ng-repeat="t in tweets")
+		div.row(ng-repeat="t in twitter.tweets")
 			div.col-xs-2.col-sm-1
 				img.img-circle(ng-src="{{t.user.profile_image_url}}")
 			div.col-xs-10.col-sm-11
 				small {{t.user.name}}
 				br 
 				p {{t.text}}
-				a(ng-show="myTweets" ng-click="deleteTweet(t.id_str)") Delete this status
-				a(ng-show="!myTweets" ng-click="reTweet(t.id_str)") Retweet this status
+				a(ng-show="twitter.myTweets" ng-click="deleteTweet(t.id_str)") Delete this status
+				a(ng-show="!twitter.myTweets" ng-click="reTweet(t.id_str)") Retweet this status

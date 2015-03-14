@@ -15,12 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'public/js/lib/angular/angular.js',
-      'public/js/lib/angular/angular-mocks.js',
-      'public/js/lib/angular/angular-route.js',
-      'public/js/lib/jquery/jquery.js',
-      'public/js/lib/oauth/oauth.js',
-      'test/lib/jasmine-sinon.js',
+      'public/bower_components/angular/angular.js',
+      'public/bower_components/angular-mocks/angular-mocks.js',
+      'public/bower_components/angular-route/angular-route.js',
+      'public/bower_components/jquery/dist/jquery.js',
+      'public/bower_components/oauth-js/dist/oauth.js',
+      'public/bower_components/jasmine-sinon/lib/jasmine-sinon.js',
       'public/js/*.js',
       'test/**/*Spec.js'
     ],
