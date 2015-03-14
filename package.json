@@ -1,15 +1,13 @@
 {
   "name": "angulearn",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Angular Learn App",
   "main": "app.js",
   "scripts": {
     "postinstall": "bower install",
-
     "prestart": "npm install",
     "test": "node node_modules/karma/bin/karma start karma.conf.js",
-
     "pretest": "npm install",
     "start": "node app.js",
     "start-log": "node app.js -l"
