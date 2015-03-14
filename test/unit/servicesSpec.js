@@ -165,7 +165,7 @@ describe("Services", function(){
 			expect(youtubeService.me()).toBe('ME');
 			expect(youtubeService.getPopularVideos()).toBe('GET /youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10');
 			OAuth.create.restore();
-		})
+		});
 	});
 
 	describe('redditService', function(){

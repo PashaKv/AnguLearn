@@ -1,1 +1,2 @@
 // *FILTERS here* //
+'use strict';

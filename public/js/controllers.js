@@ -1,4 +1,6 @@
 //Controllers here
+'use strict';
+
 (function () {
 
 	angular.module('anguLearn.controllers', ['anguLearn.services']).
@@ -19,7 +21,7 @@
 			twitterService.deleteTweet(id).then(function(){
 				$scope.getMyTweets();
 			});
-		}
+		};
 
 		$scope.reTweet = function(id){
 			if($scope.twitter.myTweets){
@@ -28,7 +30,7 @@
 			twitterService.reTweet(id).then(function(){
 				$scope.getMyTweets();
 			});
-		}
+		};
 
 		$scope.getTweets = function(){
 			twitterService.getAllTweets().then(function(data){
@@ -78,8 +80,7 @@
 	        $('#twitter-gettweets').show();
 	        $('#twitter-logout').show();
 	        $scope.getTweets();
-	    };
-
+	    }
 	}]).
 	controller('YoutubeCtrl', ['$scope', 'youtubeService', function($scope, youtubeService){
 		$scope.videos = {};
@@ -125,19 +126,19 @@
 		$scope.closeVideo = function(){
 			$scope.theVideo = false;
 			$('#videoFrame').html("");
-		}
+		};
 
 		$scope.showVideo = function(id){
 			$scope.theVideo = true;
 			$('#videoFrame').html("<iframe id=\"videoFrame\" width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+id+"\" frameborder=\"0\" allowfullscreen></iframe>");
-		}
+		};
 
 		if(youtubeService.isReady()){
 			$('#youtube-login').hide();
 			$('#youtube-logout').show();
 			$scope.initMe();
 			$scope.getVideos();
-		};
+		}
 	}])
 	.controller('RedditCtrl', ['$scope', 'redditService', function($scope, redditService){
 		redditService.init();
@@ -146,7 +147,7 @@
 			redditService.connectReddit();
 		};
 
-		getMyInfo = function(){
+		var getMyInfo = function(){
 			if(redditService.isReady()){
 				redditService.me().then(function(data){
 					data = data.data;
@@ -156,7 +157,7 @@
 					console.log(error);
 					$scope.error = error;
 				});
-			};
+			}
 		};
 
 		$scope.getHotLinks = function(){
@@ -167,7 +168,7 @@
 					console.log(error);
 					$scope.error = error;
 				});
-			};
+			}
 		};
 
 		getMyInfo();

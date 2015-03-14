@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var path = require('path');
 var index = require('./routes/index');
@@ -36,8 +38,8 @@ app.use('/', index);
  */
 
 var server = app.listen(app.get('port'), function () {
-    var host = server.address().address
-    var port = server.address().port
+    var host = server.address().address;
+    var port = server.address().port;
 
-    console.log('AnguLearn is listening at http://%s:%s', host, port)
+    console.log('AnguLearn is listening at http://%s:%s', host, port);
 });

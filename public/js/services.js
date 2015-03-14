@@ -1,4 +1,5 @@
 //Services here
+'use strict';
 (function () {
 	angular.module('anguLearn.services', []).
 	factory('twitterService', ['$q', function($q){
@@ -40,7 +41,7 @@
 			reTweet: function(id){
 				return authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true});
 			}
-		}
+		};
 	}]).
 	factory('youtubeService', ['$q', function($q){
 		var authResult = false;
@@ -90,18 +91,18 @@
   		}
   		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     	s4() + '-' + s4() + s4() + s4();
-		};
+		}
 
 		function saveState(newState){
-			$window.sessionStorage['angulearn_state'] = newState.toString();
-		};
+			$window.sessionStorage.angulearn_state = newState.toString();
+		}
 
 		return {
 			init: function(){
-				state = $window.sessionStorage['angulearn_state'] || generateState();
-				if(!$window.sessionStorage['angulearn_state']){
+				state = $window.sessionStorage.angulearn_state || generateState();
+				if(!$window.sessionStorage.angulearn_state){
 					saveState(state);
-				};
+				}
 				redditLink = "https://ssl.reddit.com/api/v1/authorize?client_id="+client_id+"&response_type=token&state="+state+"&redirect_uri="+redirect_uri+"&scope="+reddit_scope;
 
 				$location.hash().split('&').forEach(function (param) {
@@ -121,7 +122,7 @@
 			},
 			clearCache: function(){
 				params = {};
-				$window.sessionStorage['angulearn_state'] = '';
+				$window.sessionStorage.angulearn_state = '';
 			},
 			me: function(){
 				return $http.get('https://oauth.reddit.com/api/v1/me', {headers:{'Authorization':'bearer '+params.access_token}});
@@ -129,6 +130,6 @@
 			hot: function(){
 				return $http.get('https://oauth.reddit.com/hot', {headers:{'Authorization':'bearer '+params.access_token}});
 			}
-		}
+		};
 	}]);
 })();

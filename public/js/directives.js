@@ -1,4 +1,5 @@
 // *directives* //
+'use strict';
 (function(){
   angular.module('anguLearn.directives', []).
   directive('redditPost', function(){
