@@ -17,8 +17,8 @@ describe("Services", function(){
 		});
 	});
 
-	beforeEach(module('anguLearn'));
-	beforeEach(module('anguLearn.services'));
+	beforeEach(module('anguLearn.app'));
+	beforeEach(module('anguLearn.app.services'));
 
 	describe('twitterService', function(){
 		var twitterService, deferred, $rootScope;

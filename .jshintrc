@@ -1,0 +1,18 @@
+{
+  "devel": true,
+  "globals": {
+    "angular": false,
+    "describe": false,
+    "it": false,
+    "expect": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "module": false,
+    "inject": false,
+    "require": false,
+    "OAuth": false,
+    "$": false,
+    "sinon": false,
+    "jasmine": false
+  }
+}

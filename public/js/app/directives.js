@@ -1,7 +1,6 @@
 // *directives* //
-'use strict';
 (function(){
-  angular.module('anguLearn.directives', []).
+  angular.module('anguLearn.app.directives', []).
   directive('redditPost', function(){
     return {
       restrict: 'E',

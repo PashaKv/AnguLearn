@@ -1,9 +1,7 @@
 //Controllers here
-'use strict';
-
 (function () {
 
-	angular.module('anguLearn.controllers', ['anguLearn.services']).
+	angular.module('anguLearn.app.controllers', ['anguLearn.app.services']).
 	controller('IndexCtrl', ['$scope', function($scope){
 		$scope.name = 'World!';
 	}]).

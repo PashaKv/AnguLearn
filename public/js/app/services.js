@@ -1,7 +1,6 @@
 //Services here
-'use strict';
 (function () {
-	angular.module('anguLearn.services', []).
+	angular.module('anguLearn.app.services', []).
 	factory('twitterService', ['$q', function($q){
 		var authResult = false;
 

@@ -17,9 +17,9 @@ describe("Controllers", function(){
 		});
 	});
 
-	beforeEach(module('anguLearn'));
-	beforeEach(module('anguLearn.controllers'));
-	beforeEach(module('anguLearn.services'));
+	beforeEach(module('anguLearn.app'));
+	beforeEach(module('anguLearn.app.controllers'));
+	beforeEach(module('anguLearn.app.services'));
 
 	describe('IndexCtrl', function(){
 		var indexCtrl, scope;
