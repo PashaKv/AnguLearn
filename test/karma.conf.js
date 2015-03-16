@@ -22,6 +22,7 @@ module.exports = function(config) {
       'public/bower_components/jasmine-sinon/lib/jasmine-sinon.js',
       'public/bower_components/angular-ui-router/release/angular-ui-router.js',
       'public/js/app/**/*.js',
+      'test/unit/customMatchers.js',
       'test/unit/**/*Spec.js',
       'views/**/*.jade'
     ],

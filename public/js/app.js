@@ -9,5 +9,9 @@
 			'anguLearn.reddit',
 			'anguLearn.uirouter'
 		]
-	);
+	)
+	.config(function ($locationProvider, $urlRouterProvider) {
+		$urlRouterProvider.otherwise("/");
+    $locationProvider.html5Mode(true);
+  });
 })();
