@@ -1,8 +1,7 @@
-'use strict';
-
 var express = require('express');
 var path = require('path');
 var index = require('./routes/index');
+var errorhandler = require('errorhandler');
 var log = (process.argv[2]==='-l');
 
 var app = module.exports = express();
@@ -25,13 +24,15 @@ if(log){
 //static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 /**
  * Routes
  */
 
 // Routes
 app.use('/', index);
+
+//error handling
+app.use(errorhandler());
 
 /**
  * Start Server

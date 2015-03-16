@@ -1,5 +1,13 @@
 //= include app/app.js
 //= include app/**/*.js
 (function () {
-	angular.module('anguLearn', ['anguLearn.app']);
+	angular.module('anguLearn',
+		['ui.router',
+			'anguLearn.index',
+			'anguLearn.twitter',
+			'anguLearn.youtube',
+			'anguLearn.reddit',
+			'anguLearn.uirouter'
+		]
+	);
 })();

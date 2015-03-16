@@ -1,7 +1,7 @@
-// *APP here* //
-(function () {
-	angular.module('anguLearn.app', ['ui.router', 'anguLearn.app.controllers', 'anguLearn.app.services', 'anguLearn.app.directives'])
-	.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
+//= include app/app.js//Index page
+(function(){
+  angular.module('anguLearn.index', [])
+  .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
 		$urlRouterProvider.otherwise("/");
 
 		// Now set up the states
@@ -9,121 +9,134 @@
 			.state('index', {
 				url: "/",
 				templateUrl: "partials/index",
-				controller: "IndexCtrl"
-			})
-			.state('twitter', {
-				url: "/twitter",
-				templateUrl: "partials/twitter",
-				controller: "TwitterCtrl"
-			})
-			.state('youtube', {
-				url: "/youtube",
-				templateUrl: "partials/youtube",
-				controller: "YoutubeCtrl"
-			})
-			.state('reddit', {
-				url: "/reddit",
-				templateUrl: "partials/reddit",
-				controller: "RedditCtrl"
-			})
-			.state('ui-router', {
-				url: "/ui-router",
-				templateUrl: "partials/ui-router"
-			})
-			.state('ui-router.state1', {
-				url: "/state1",
-				templateUrl: "partials/ui-router/state1"
-			})
-				.state('ui-router.state1.list', {
-					url: "/list",
-					templateUrl: "partials/ui-router/state1/list",
-					controller: function($scope) {
-						$scope.items = ["A", "List", "Of", "Items"];
-					}
-				})
-			.state('ui-router.state2', {
-				url: "/state2",
-				templateUrl: "partials/ui-router/state2"
-			})
-				.state('ui-router.state2.list', {
-					url: "/list",
-					templateUrl: "partials/ui-router/state2/list",
-					controller: function($scope) {
-						$scope.things = ["A", "Set", "Of", "Things"];
-					}
-				});
-
-    	$locationProvider.html5Mode(true);
-	});
-})();
-
-// *APP here* //
-(function () {
-	angular.module('anguLearn.app', ['ui.router', 'anguLearn.app.controllers', 'anguLearn.app.services', 'anguLearn.app.directives'])
-	.config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise("/");
-
-		// Now set up the states
-		$stateProvider
-			.state('index', {
-				url: "/",
-				templateUrl: "partials/index",
-				controller: "IndexCtrl"
-			})
-			.state('twitter', {
-				url: "/twitter",
-				templateUrl: "partials/twitter",
-				controller: "TwitterCtrl"
-			})
-			.state('youtube', {
-				url: "/youtube",
-				templateUrl: "partials/youtube",
-				controller: "YoutubeCtrl"
-			})
-			.state('reddit', {
-				url: "/reddit",
-				templateUrl: "partials/reddit",
-				controller: "RedditCtrl"
-			})
-			.state('ui-router', {
-				url: "/ui-router",
-				templateUrl: "partials/ui-router"
-			})
-			.state('ui-router.state1', {
-				url: "/state1",
-				templateUrl: "partials/ui-router/state1"
-			})
-				.state('ui-router.state1.list', {
-					url: "/list",
-					templateUrl: "partials/ui-router/state1/list",
-					controller: function($scope) {
-						$scope.items = ["A", "List", "Of", "Items"];
-					}
-				})
-			.state('ui-router.state2', {
-				url: "/state2",
-				templateUrl: "partials/ui-router/state2"
-			})
-				.state('ui-router.state2.list', {
-					url: "/list",
-					templateUrl: "partials/ui-router/state2/list",
-					controller: function($scope) {
-						$scope.things = ["A", "Set", "Of", "Things"];
-					}
-				});
-
-    	$locationProvider.html5Mode(true);
-	});
-})();
-
-//Controllers here
-(function () {
-
-	angular.module('anguLearn.app.controllers', ['anguLearn.app.services']).
-	controller('IndexCtrl', ['$scope', function($scope){
+				controller: "IndexController"
+			});
+      $locationProvider.html5Mode(true);
+  })
+  .controller('IndexController', ['$scope', function($scope){
 		$scope.name = 'World!';
-	}]).
-	controller('TwitterCtrl', ['$scope', 'twitterService', function($scope, twitterService){
+	}]);
+})();
+
+//Index page
+(function(){
+  angular.module('anguLearn.reddit', [])
+  .config(function ($stateProvider) {
+		$stateProvider
+      .state('reddit', {
+				url: "/reddit",
+				templateUrl: "partials/reddit",
+				controller: "RedditController"
+			});
+  })
+  .controller('RedditController', ['$scope', 'redditService', function($scope, redditService){
+		redditService.init();
+
+		$scope.login = function(){
+			redditService.connectReddit();
+		};
+
+		var getMyInfo = function(){
+			if(redditService.isReady()){
+				redditService.me().then(function(data){
+					data = data.data;
+					$scope.name = data.name;
+					$scope.created = data.created;
+				}, function(error){
+					console.log(error);
+					$scope.error = error;
+				});
+			}
+		};
+
+		$scope.getHotLinks = function(){
+			if(redditService.isReady()){
+				redditService.hot().then(function(data){
+					$scope.posts = data.data.data.children;
+				}, function(error){
+					console.log(error);
+					$scope.error = error;
+				});
+			}
+		};
+
+		getMyInfo();
+		$scope.getHotLinks();
+	}]).factory('redditService', ['$window', '$location', '$http', function($window, $location, $http){
+		var redirect_uri = 'http://localhost:3000/reddit';
+		var client_id = 'OpVJdT3rse-m9w';
+		var reddit_scope = 'identity,read';
+		var redditLink;
+		var params = {};
+		var state = '';
+
+		function generateState() {
+			function s4() {
+    		return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  		}
+  		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    	s4() + '-' + s4() + s4() + s4();
+		}
+
+		function saveState(newState){
+			$window.sessionStorage.angulearn_state = newState.toString();
+		}
+
+		return {
+			init: function(){
+				state = $window.sessionStorage.angulearn_state || generateState();
+				if(!$window.sessionStorage.angulearn_state){
+					saveState(state);
+				}
+				redditLink = "https://ssl.reddit.com/api/v1/authorize?client_id="+client_id+"&response_type=token&state="+state+"&redirect_uri="+redirect_uri+"&scope="+reddit_scope;
+
+				$location.hash().split('&').forEach(function (param) {
+					param = param.split('=');
+					params[param[0]] = param[1];
+				});
+			},
+			isReady: function(){
+				if(params.access_token){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			connectReddit: function(){
+				$window.location.replace(redditLink);
+			},
+			clearCache: function(){
+				params = {};
+				$window.sessionStorage.angulearn_state = '';
+			},
+			me: function(){
+				return $http.get('https://oauth.reddit.com/api/v1/me', {headers:{'Authorization':'bearer '+params.access_token}});
+			},
+			hot: function(){
+				return $http.get('https://oauth.reddit.com/hot', {headers:{'Authorization':'bearer '+params.access_token}});
+			}
+		};
+	}])
+  .directive('redditPost', function(){
+    return {
+      restrict: 'E',
+      templateUrl: 'partials/reddit-post'
+    };
+  });
+})();
+
+//Twitter page
+(function(){
+  angular.module('anguLearn.twitter', [])
+  .config(function ($stateProvider) {
+		$stateProvider
+      .state('twitter', {
+        url: "/twitter",
+        templateUrl: "partials/twitter",
+        controller: "TwitterController"
+      });
+  })
+  .controller('TwitterController', ['$scope', 'twitterService', function($scope, twitterService){
 		var twitter = {};
 		$scope.twitter = twitter;
 		twitter.tweets = {};
@@ -197,8 +210,96 @@
 	    $('#twitter-logout').show();
 	    $scope.getTweets();
 	  }
-	}]).
-	controller('YoutubeCtrl', ['$scope', 'youtubeService', function($scope, youtubeService){
+	}])
+  .factory('twitterService', ['$q', function($q){
+		var authResult = false;
+
+		return {
+			init: function(){
+				OAuth.initialize('cIyA2CTYFnn3Y38En7gD228v2R0', {cache: true});
+				authResult = OAuth.create('twitter');
+			},
+			isReady: function(){
+				return authResult;
+			},
+			connectTwitter: function(){
+				var deferred = $q.defer();
+				OAuth.popup('twitter', {cache:true}, function(err, result){
+					if(!err){
+						authResult = result;
+						deferred.resolve(true);
+					}else{
+						deferred.reject(err);
+					}
+				});
+				return deferred.promise;
+			},
+			clearCache: function(){
+				OAuth.clearCache('twitter');
+				authResult = false;
+			},
+			getAllTweets: function(){
+			  return authResult.get('/1.1/statuses/home_timeline.json');
+			},
+			getUserTweets: function(){
+				return authResult.get('/1.1/statuses/user_timeline.json');
+			},
+			deleteTweet: function(id){
+				return authResult.post('/1.1/statuses/destroy/'+id+'.json', {id: id, trim_user: true});
+			},
+			reTweet: function(id){
+				return authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true});
+			}
+		};
+	}]);  
+})();
+
+//Index page
+(function(){
+  angular.module('anguLearn.uirouter', [])
+  .config(function ($stateProvider) {
+		$stateProvider
+      .state('uirouter', {
+        url: "/uirouter",
+        templateUrl: "partials/uirouter"
+      })
+      .state('uirouter.state1', {
+        url: "/state1",
+        templateUrl: "partials/uirouter/state1"
+      })
+        .state('uirouter.state1.list', {
+          url: "/list",
+          templateUrl: "partials/uirouter/state1/list",
+          controller: function($scope) {
+            $scope.items = ["A", "List", "Of", "Items"];
+          }
+        })
+      .state('uirouter.state2', {
+        url: "/state2",
+        templateUrl: "partials/uirouter/state2"
+      })
+        .state('uirouter.state2.list', {
+          url: "/list",
+          templateUrl: "partials/uirouter/state2/list",
+          controller: function($scope) {
+            $scope.things = ["A", "Set", "Of", "Things"];
+          }
+        });
+  });
+})();
+
+//Youtube page
+(function(){
+  angular.module('anguLearn.youtube', [])
+  .config(function ($stateProvider) {
+		$stateProvider
+      .state('youtube', {
+        url: "/youtube",
+        templateUrl: "partials/youtube",
+        controller: "YoutubeController"
+      });
+  })
+  .controller('YoutubeController', ['$scope', 'youtubeService', function($scope, youtubeService){
 		$scope.videos = {};
 		$scope.me = false;
 		$scope.theVideo = false;
@@ -256,104 +357,7 @@
 			$scope.getVideos();
 		}
 	}])
-	.controller('RedditCtrl', ['$scope', 'redditService', function($scope, redditService){
-		redditService.init();
-
-		$scope.login = function(){
-			redditService.connectReddit();
-		};
-
-		var getMyInfo = function(){
-			if(redditService.isReady()){
-				redditService.me().then(function(data){
-					data = data.data;
-					$scope.name = data.name;
-					$scope.created = data.created;
-				}, function(error){
-					console.log(error);
-					$scope.error = error;
-				});
-			}
-		};
-
-		$scope.getHotLinks = function(){
-			if(redditService.isReady()){
-				redditService.hot().then(function(data){
-					$scope.posts = data.data.data.children;
-				}, function(error){
-					console.log(error);
-					$scope.error = error;
-				});
-			}
-		};
-
-		getMyInfo();
-		$scope.getHotLinks();
-	}])
-	.controller('UIRouterCtrl', ['$scope', function($scope){
-		//TODO: ui-route controller
-	}]);
-
-})();
-
-// *directives* //
-(function(){
-  angular.module('anguLearn.app.directives', []).
-  directive('redditPost', function(){
-    return {
-      restrict: 'E',
-      templateUrl: 'partials/reddit-post'
-    };
-  });
-})();
-
-// *FILTERS here* //
-
-//Services here
-(function () {
-	angular.module('anguLearn.app.services', []).
-	factory('twitterService', ['$q', function($q){
-		var authResult = false;
-
-		return {
-			init: function(){
-				OAuth.initialize('cIyA2CTYFnn3Y38En7gD228v2R0', {cache: true});
-				authResult = OAuth.create('twitter');
-			},
-			isReady: function(){
-				return authResult;
-			},
-			connectTwitter: function(){
-				var deferred = $q.defer();
-				OAuth.popup('twitter', {cache:true}, function(err, result){
-					if(!err){
-						authResult = result;
-						deferred.resolve(true);
-					}else{
-						deferred.reject(err);
-					}
-				});
-				return deferred.promise;
-			},
-			clearCache: function(){
-				OAuth.clearCache('twitter');
-				authResult = false;
-			},
-			getAllTweets: function(){
-			  return authResult.get('/1.1/statuses/home_timeline.json');
-			},
-			getUserTweets: function(){
-				return authResult.get('/1.1/statuses/user_timeline.json');
-			},
-			deleteTweet: function(id){
-				return authResult.post('/1.1/statuses/destroy/'+id+'.json', {id: id, trim_user: true});
-			},
-			reTweet: function(id){
-				return authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true});
-			}
-		};
-	}]).
-	factory('youtubeService', ['$q', function($q){
+  .factory('youtubeService', ['$q', function($q){
 		var authResult = false;
 
 		return {
@@ -387,64 +391,18 @@
 				return authResult.get('/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10');
 			}
 		};
-	}]).factory('redditService', ['$window', '$location', '$http', function($window, $location, $http){
-		var redirect_uri = 'http://localhost:3000/reddit';
-		var client_id = 'OpVJdT3rse-m9w';
-		var reddit_scope = 'identity,read';
-		var redditLink;
-		var params = {};
-		var state = '';
-
-		function generateState() {
-			function s4() {
-    		return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  		}
-  		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    	s4() + '-' + s4() + s4() + s4();
-		}
-
-		function saveState(newState){
-			$window.sessionStorage.angulearn_state = newState.toString();
-		}
-
-		return {
-			init: function(){
-				state = $window.sessionStorage.angulearn_state || generateState();
-				if(!$window.sessionStorage.angulearn_state){
-					saveState(state);
-				}
-				redditLink = "https://ssl.reddit.com/api/v1/authorize?client_id="+client_id+"&response_type=token&state="+state+"&redirect_uri="+redirect_uri+"&scope="+reddit_scope;
-
-				$location.hash().split('&').forEach(function (param) {
-					param = param.split('=');
-					params[param[0]] = param[1];
-				});
-			},
-			isReady: function(){
-				if(params.access_token){
-					return true;
-				}else{
-					return false;
-				}
-			},
-			connectReddit: function(){
-				$window.location.replace(redditLink);
-			},
-			clearCache: function(){
-				params = {};
-				$window.sessionStorage.angulearn_state = '';
-			},
-			me: function(){
-				return $http.get('https://oauth.reddit.com/api/v1/me', {headers:{'Authorization':'bearer '+params.access_token}});
-			},
-			hot: function(){
-				return $http.get('https://oauth.reddit.com/hot', {headers:{'Authorization':'bearer '+params.access_token}});
-			}
-		};
 	}]);
 })();
 
 
 (function () {
-	angular.module('anguLearn', ['anguLearn.app']);
+	angular.module('anguLearn',
+		['ui.router',
+			'anguLearn.index',
+			'anguLearn.twitter',
+			'anguLearn.youtube',
+			'anguLearn.reddit',
+			'anguLearn.uirouter'
+		]
+	);
 })();
