@@ -1,5 +1,4 @@
 //Services tested here
-'use strict';
 
 describe("Services", function(){
 

@@ -17,12 +17,13 @@ module.exports = function(config) {
     files: [
       'public/bower_components/angular/angular.js',
       'public/bower_components/angular-mocks/angular-mocks.js',
-      'public/bower_components/angular-route/angular-route.js',
       'public/bower_components/jquery/dist/jquery.js',
       'public/bower_components/oauth-js/dist/oauth.js',
       'public/bower_components/jasmine-sinon/lib/jasmine-sinon.js',
-      'public/js/**/*.js',
-      'test/unit/**/*Spec.js'
+      'public/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'public/js/app/**/*.js',
+      'test/unit/**/*Spec.js',
+      'views/**/*.jade'
     ],
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -35,10 +36,17 @@ module.exports = function(config) {
     },
 
     preprocessors: {
-      // source files, that you wanna generate coverage for
-      // do not include tests or libraries
-      // (these files will be instrumented by Istanbul)
-      'public/js/**/*.js' : ['coverage']
+      'public/js/app/**/*.js' : ['coverage'],
+      'views/**/*.jade': ['ng-jade2js']
+    },
+
+    ngJade2JsPreprocessor: {
+      cacheIdFromPath: function(filepath) {
+        filepath = filepath.replace(/\.jade$/, '');
+        filepath = filepath.replace(/^views\//, '');
+        return filepath;
+      },
+      moduleName: 'anguLearn.templates'
     },
 
     // web server port

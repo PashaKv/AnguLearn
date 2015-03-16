@@ -62,23 +62,23 @@
 			});
 		};
 
-	    $scope.logOut = function() {
-	        twitterService.clearCache();
-					twitter.tweets = {};
-	        $('#twitter-login').fadeIn();
-	        $('#twitter-getmytweets').fadeOut();
-	        $('#twitter-gettweets').fadeOut();
-	        $('#twitter-logout').fadeOut();
-	    };
+	  $scope.logOut = function() {
+	  	twitterService.clearCache();
+			twitter.tweets = {};
+	    $('#twitter-login').fadeIn();
+	    $('#twitter-getmytweets').fadeOut();
+	    $('#twitter-gettweets').fadeOut();
+	    $('#twitter-logout').fadeOut();
+	  };
 
-	    //if the user is a returning user, hide the sign in button and display the tweets
-	    if (twitterService.isReady()) {
-	        $('#twitter-login').hide();
-	        $('#twitter-getmytweets').show();
-	        $('#twitter-gettweets').show();
-	        $('#twitter-logout').show();
-	        $scope.getTweets();
-	    }
+	  //if the user is a returning user, hide the sign in button and display the tweets
+	  if (twitterService.isReady()) {
+	  	$('#twitter-login').hide();
+	    $('#twitter-getmytweets').show();
+	    $('#twitter-gettweets').show();
+	    $('#twitter-logout').show();
+	    $scope.getTweets();
+	  }
 	}]).
 	controller('YoutubeCtrl', ['$scope', 'youtubeService', function($scope, youtubeService){
 		$scope.videos = {};
@@ -171,6 +171,9 @@
 
 		getMyInfo();
 		$scope.getHotLinks();
+	}])
+	.controller('UIRouterCtrl', ['$scope', function($scope){
+		//TODO: ui-route controller
 	}]);
 
 })();

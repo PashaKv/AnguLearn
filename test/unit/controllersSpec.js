@@ -1,5 +1,4 @@
 //Controllers tested here
-'use strict';
 
 describe("Controllers", function(){
 
@@ -19,7 +18,6 @@ describe("Controllers", function(){
 
 	beforeEach(module('anguLearn.app'));
 	beforeEach(module('anguLearn.app.controllers'));
-	beforeEach(module('anguLearn.app.services'));
 
 	describe('IndexCtrl', function(){
 		var indexCtrl, scope;
@@ -51,7 +49,7 @@ describe("Controllers", function(){
 				reTweet: function(id){}
 			});
 
-			module('anguLearn', function($provide){
+			module('anguLearn.app', function($provide){
 				$provide.value('twitterService', mockTwitterService);
 			});
 
@@ -158,10 +156,28 @@ describe("Controllers", function(){
 			stub.restore();
 		});
 
-		it('should test the login');
+		it('should login using twitterService', function(){
+			mockTwitterService.connectTwitter.returns($q.when(1));
+			expect(mockTwitterService.connectTwitter).not.toHaveBeenCalled();
+			expect(mockTwitterService.isReady).toHaveBeenCalledOnce();
+			scope.logIn();
+			expect(mockTwitterService.connectTwitter).toHaveBeenCalledOnce();
+			$rootScope.$digest();
+			expect(mockTwitterService.isReady).toHaveBeenCalledTwice();
+		});
 
-		it('should test the logout');
+		it('should test the logout', function(){
+			var sampleData = {'test1': 'testdata1', 'test2': 'testdata2'};
+			scope.twitter.tweets = sampleData;
+			expect(scope.twitter.tweets).toEqualData(sampleData);
+			expect(mockTwitterService.clearCache).not.toHaveBeenCalled();
+			scope.logOut();
+			expect(scope.twitter.tweets).toEqualData({});
+			expect(mockTwitterService.clearCache).toHaveBeenCalledOnce();
+		});
 
-		it('should test the autologin by isReady func result');
+		it('should test the autologin by isReady func result', function(){
+			expect(mockTwitterService.isReady).toHaveBeenCalledOnce();
+		});
 	});
 });
