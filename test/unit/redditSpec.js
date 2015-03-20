@@ -3,7 +3,90 @@ describe('Reddit', function(){
   beforeEach(module('ui.router'));
   beforeEach(module('anguLearn.reddit'));
   beforeEach(module('anguLearn.templates'));
-  
+
+  describe('Controller', function(){
+    var redditCtrl, scope, redditService, $q, $rootScope;
+    beforeEach(inject(function(_$controller_, _redditService_, _$rootScope_, _$q_){
+      $q = _$q_;
+      $rootScope = _$rootScope_;
+      scope = _$rootScope_.$new();
+      redditService = sinon.stub(_redditService_);
+      redditCtrl = _$controller_('RedditController', {$scope:scope, redditService:redditService});
+    }));
+
+    it('should initialize the service on creation', function(){
+      expect(redditService.init).toHaveBeenCalledOnce();
+    });
+
+    it('should try to get user info and on creation', function(){
+      expect(redditService.isReady).toHaveBeenCalledTwice();
+    });
+
+
+    it('should create logIn function that connects to reddit', function(){
+      expect(scope.logIn).toBeDefined();
+      expect(redditService.connectReddit).not.toHaveBeenCalled();
+      scope.logIn();
+      expect(redditService.connectReddit).toHaveBeenCalledOnce();
+    });
+
+    it('shouldn\'t try to get any info if redditService isn\'t ready', function(){
+      var initialCount = redditService.isReady.callCount;
+      redditCtrl.getMyInfo();
+      expect(redditService.isReady.callCount).toBe(initialCount+1);
+      expect(redditService.me).not.toHaveBeenCalled();
+      scope.getHotLinks();
+      expect(redditService.isReady.callCount).toBe(initialCount+2);
+      expect(redditService.hot).not.toHaveBeenCalled();
+    });
+
+    it('should get user info if redditService is ready and provide error if request fails', function(){
+      redditService.isReady.returns(true);
+      var deferred = $q.defer();
+      var sampleData = {
+                          data:{
+                            name: 'test',
+                            created: 'test2'
+                          }
+                        };
+      redditService.me.returns(deferred.promise);
+      redditCtrl.getMyInfo();
+      deferred.resolve(sampleData);
+      $rootScope.$digest();
+      expect(scope.name).toBe('test');
+      expect(scope.created).toBe('test2');
+      deferred = $q.defer();
+      redditService.me.returns(deferred.promise);
+      redditCtrl.getMyInfo();
+      deferred.reject('TEST ERROR');
+      $rootScope.$digest();
+      expect(scope.error).toBe('TEST ERROR');
+    });
+
+    it('should get hot links redditService is ready and provide error if request fails', function(){
+      redditService.isReady.returns(true);
+      var deferred = $q.defer();
+      var sampleData = {
+                          data:{
+                            data:{
+                              children: ['1', '2', '3']
+                            }
+                          }
+                        };
+      redditService.hot.returns(deferred.promise);
+      scope.getHotLinks();
+      deferred.resolve(sampleData);
+      $rootScope.$digest();
+      expect(scope.posts).toEqualData(['1', '2', '3']);
+      deferred = $q.defer();
+      redditService.hot.returns(deferred.promise);
+      scope.getHotLinks();
+      deferred.reject('TEST ERROR');
+      $rootScope.$digest();
+      expect(scope.error).toBe('TEST ERROR');
+    });
+  });
+
 	describe('Service', function(){
 		var redditService, $window, $http;
 

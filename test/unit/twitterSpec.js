@@ -28,7 +28,7 @@ describe('Twitter', function(){
   			$q = _$q_;
   			$rootScope = _$rootScope_;
   			ctrl = $controller('TwitterController', {$scope:scope});
-  			scope.on = ctrl;
+  			sinon.spy(scope.getTweets);
   		});
   	});
 
@@ -130,9 +130,16 @@ describe('Twitter', function(){
   		expect(mockTwitterService.connectTwitter).not.toHaveBeenCalled();
   		expect(mockTwitterService.isReady).toHaveBeenCalledOnce();
   		scope.logIn();
+      sinon.stub(scope, 'getTweets');
   		expect(mockTwitterService.connectTwitter).toHaveBeenCalledOnce();
-  		$rootScope.$digest();
-  		expect(mockTwitterService.isReady).toHaveBeenCalledTwice();
+      $rootScope.$digest();
+      expect(mockTwitterService.isReady).toHaveBeenCalledTwice();
+      expect(scope.getTweets).not.toHaveBeenCalled();
+      mockTwitterService.isReady.returns(true);
+      scope.logIn();
+      $rootScope.$digest();
+      expect(scope.getTweets).toHaveBeenCalledOnce();
+      scope.getTweets.restore();
   	});
 
 		it('should test the logout', function(){
@@ -145,9 +152,19 @@ describe('Twitter', function(){
 			expect(mockTwitterService.clearCache).toHaveBeenCalledOnce();
 		});
 
-		it('should test the autologin by isReady func result', function(){
+		it('should try to autologin by isReady func result', function(){
 			expect(mockTwitterService.isReady).toHaveBeenCalledOnce();
+      expect(scope.getTweets).not.toHaveBeenCalled();
+      mockTwitterService.isReady.returns(true);
+      mockTwitterService.getAllTweets.returns($q.when({data: 1}));
+      sinon.stub(scope, '$apply');
+      ctrl = $controller('TwitterController', {$scope:scope});
+      $rootScope.$digest();
+      scope.$apply.restore();
+      expect(scope.twitter.tweets).toEqualData({data: 1});
 		});
+
+
 	});
 
   describe('Service', function(){

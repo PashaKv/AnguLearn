@@ -12,18 +12,19 @@
   .controller('RedditController', ['$scope', 'redditService', function($scope, redditService){
 		redditService.init();
 
-		$scope.login = function(){
+		$scope.logIn = function(){
 			redditService.connectReddit();
 		};
 
-		var getMyInfo = function(){
+		this.getMyInfo = function(){
 			if(redditService.isReady()){
 				redditService.me().then(function(data){
 					data = data.data;
 					$scope.name = data.name;
 					$scope.created = data.created;
 				}, function(error){
-					console.log(error);
+					// console.log(error);
+          //TODO: proper error handling
 					$scope.error = error;
 				});
 			}
@@ -34,15 +35,17 @@
 				redditService.hot().then(function(data){
 					$scope.posts = data.data.data.children;
 				}, function(error){
-					console.log(error);
+					// console.log(error);
+          //TODO: proper error handling
 					$scope.error = error;
 				});
 			}
 		};
 
-		getMyInfo();
+		this.getMyInfo();
 		$scope.getHotLinks();
-	}]).factory('redditService', ['$window', '$location', '$http', function($window, $location, $http){
+	}])
+  .factory('redditService', ['$window', '$location', '$http', function($window, $location, $http){
 		var redirect_uri = 'http://localhost:3000/reddit';
 		var client_id = 'OpVJdT3rse-m9w';
 		var reddit_scope = 'identity,read';
