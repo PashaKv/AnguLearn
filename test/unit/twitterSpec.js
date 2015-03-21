@@ -2,6 +2,7 @@ describe('Twitter', function(){
 
   beforeEach(module('ui.router'));
   beforeEach(module('anguLearn.twitter'));
+  beforeEach(module('anguLearn.templates'));
 
   describe('Controller', function(){
   	var ctrl, scope, mockTwitterService, $controller, $q, $rootScope;

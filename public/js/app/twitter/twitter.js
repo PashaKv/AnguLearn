@@ -7,9 +7,13 @@
         url: "/twitter",
         templateUrl: "partials/twitter",
         controller: "TwitterController"
-      });
+      })
+        .state('twitter.list', {
+          url: "/list",
+          templateUrl: "partials/twitter/list"
+        });
   })
-  .controller('TwitterController', ['$scope', 'twitterService', function($scope, twitterService){
+  .controller('TwitterController', ['$scope', 'twitterService', '$state', function($scope, twitterService, $state){
 		var twitter = {};
 		$scope.twitter = twitter;
 		twitter.tweets = {};
@@ -39,6 +43,7 @@
 				twitter.myTweets = false;
 				twitter.tweets = data;
 				$scope.$apply();
+        $state.go('twitter.list');
 			}, function(error){
 				console.error(error);
 			});
@@ -49,6 +54,7 @@
 				twitter.myTweets = true;
 				twitter.tweets = data;
 				$scope.$apply();
+        $state.go('twitter.list');
 			}, function(error){
 				console.error(error);
 			});
@@ -73,6 +79,7 @@
 	    $('#twitter-getmytweets').fadeOut();
 	    $('#twitter-gettweets').fadeOut();
 	    $('#twitter-logout').fadeOut();
+      $state.go('twitter');
 	  };
 
 	  //if the user is a returning user, hide the sign in button and display the tweets
@@ -124,5 +131,11 @@
 				return authResult.post('/1.1/statuses/retweet/'+id+'.json', {id: id, trim_user: true});
 			}
 		};
-	}]);  
+	}])
+  .directive('tweet', function(){
+    return {
+      restrict: 'E',
+      templateUrl: 'partials/twitter/tweet'
+    };
+  });
 })();

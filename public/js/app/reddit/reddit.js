@@ -103,7 +103,7 @@
   .directive('redditPost', function(){
     return {
       restrict: 'E',
-      templateUrl: 'partials/reddit-post'
+      templateUrl: 'partials/reddit/post'
     };
   });
 })();
